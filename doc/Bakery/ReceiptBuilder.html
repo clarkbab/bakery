@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>class Bakery::ReceiptBuilder - RDoc Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+  var index_rel_prefix = "../";
+</script>
+
+<script src="../js/jquery.js"></script>
+<script src="../js/darkfish.js"></script>
+
+<link href="../css/fonts.css" rel="stylesheet">
+<link href="../css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../table_of_contents.html#pages">Pages</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    <div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  
+  <p class="link"><a href="../Object.html">Object</a>
+  
+</div>
+
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-i-build_line">#build_line</a>
+    
+    <li ><a href="#method-i-error_line">#error_line</a>
+    
+    <li ><a href="#method-i-group_by_quantity">#group_by_quantity</a>
+    
+    <li ><a href="#method-i-group_text">#group_text</a>
+    
+    <li ><a href="#method-i-identical_codes-3F">#identical_codes?</a>
+    
+    <li ><a href="#method-i-summary_text">#summary_text</a>
+    
+    <li ><a href="#method-i-total_price">#total_price</a>
+    
+    <li ><a href="#method-i-total_quantity">#total_quantity</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-Bakery::ReceiptBuilder">
+  <h1 id="class-Bakery::ReceiptBuilder" class="class">
+    class Bakery::ReceiptBuilder
+  </h1>
+
+  <section class="description">
+    
+<p>This class represents a builder of order receipts for customers.</p>
+
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+    <section class="constants-list">
+      <header>
+        <h3>Constants</h3>
+      </header>
+      <dl>
+      
+        <dt id="ITEM_LINE_FORMAT">ITEM_LINE_FORMAT
+        
+        <dd><p>This is the format string used for building the item line.</p>
+        
+      
+        <dt id="SUMMARY_LINE_FORMAT">SUMMARY_LINE_FORMAT
+        
+        <dd><p>This is the format string used for building the summary line.</p>
+        
+      
+      </dl>
+    </section>
+    
+
+    
+
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-build_line" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">build_line</span><span
+            class="method-args">(objects)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>This method builds an array of text strings for printing onto the receipt.
+It accepts an array of orderable <code>objects</code>.</p>
+
+<p>This method raises a InconsistentCode exception if the <code>objects</code>
+don&#39;t have the same code.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="build_line-source">
+            <pre><span class="ruby-comment"># File lib/bakery/receipt_builder.rb, line 20</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">build_line</span>(<span class="ruby-identifier">objects</span>)
+  <span class="ruby-comment"># This raises an exception unless all objects have the same code.</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Bakery</span><span class="ruby-operator">::</span><span class="ruby-constant">InconsistentCodes</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">identical_codes?</span>(<span class="ruby-identifier">objects</span>)
+
+  <span class="ruby-comment"># Add summary line to response.</span>
+  <span class="ruby-identifier">response</span> = [<span class="ruby-identifier">summary_text</span>(<span class="ruby-identifier">objects</span>)]
+
+  <span class="ruby-comment"># Separate the objects into groups by their quantity.</span>
+  <span class="ruby-identifier">groups</span> = <span class="ruby-identifier">group_by_quantity</span>(<span class="ruby-identifier">objects</span>)
+
+  <span class="ruby-comment"># Add the text for each group.</span>
+  <span class="ruby-identifier">groups</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">group</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">response</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">group_text</span>(<span class="ruby-identifier">group</span>)
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">response</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-error_line" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">error_line</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>This method returns the message to be printed when an order line could not
+be fulfilled.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="error_line-source">
+            <pre><span class="ruby-comment"># File lib/bakery/receipt_builder.rb, line 41</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">error_line</span>
+  <span class="ruby-string">&#39;Your order could not be fulfilled.&#39;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+     <section id="private-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Private Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-group_by_quantity" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">group_by_quantity</span><span
+            class="method-args">(objects)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>This methods separates <code>objects</code> into groups of differing
+quantities.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="group_by_quantity-source">
+            <pre><span class="ruby-comment"># File lib/bakery/receipt_builder.rb, line 90</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">group_by_quantity</span>(<span class="ruby-identifier">objects</span>)
+  <span class="ruby-identifier">groups</span> = []
+
+  <span class="ruby-identifier">objects</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">object</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># Has object already been added to a group?</span>
+    <span class="ruby-keyword">next</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">groups</span>.<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">object</span>)
+
+    <span class="ruby-comment"># Get quantity.</span>
+    <span class="ruby-identifier">quantity</span> = <span class="ruby-identifier">object</span>.<span class="ruby-identifier">quantity</span>
+
+    <span class="ruby-comment"># Get all objects with this quantity.</span>
+    <span class="ruby-identifier">group</span> = <span class="ruby-identifier">objects</span>.<span class="ruby-identifier">select</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">obj</span><span class="ruby-operator">|</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">quantity</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">quantity</span> }
+
+    <span class="ruby-identifier">groups</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">group</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">groups</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-group_text" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">group_text</span><span
+            class="method-args">(group)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>This method builds the text for a <code>group</code> of objects.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="group_text-source">
+            <pre><span class="ruby-comment"># File lib/bakery/receipt_builder.rb, line 67</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">group_text</span>(<span class="ruby-identifier">group</span>)
+  <span class="ruby-identifier">format</span>(
+    <span class="ruby-constant">ITEM_LINE_FORMAT</span>,
+    <span class="ruby-identifier">group</span>.<span class="ruby-identifier">count</span>,
+    <span class="ruby-identifier">group</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">quantity</span>,
+    <span class="ruby-identifier">group</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">price</span>
+  )
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-identical_codes-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">identical_codes?</span><span
+            class="method-args">(objects)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>This method determines if all the orderable <code>objects</code> passed
+have the same code.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="identical_codes-3F-source">
+            <pre><span class="ruby-comment"># File lib/bakery/receipt_builder.rb, line 50</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">identical_codes?</span>(<span class="ruby-identifier">objects</span>)
+  <span class="ruby-identifier">objects</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:code</span>).<span class="ruby-identifier">uniq</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-summary_text" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">summary_text</span><span
+            class="method-args">(objects)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>This method builds the summary for an array of <code>objects</code>.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="summary_text-source">
+            <pre><span class="ruby-comment"># File lib/bakery/receipt_builder.rb, line 56</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">summary_text</span>(<span class="ruby-identifier">objects</span>)
+  <span class="ruby-identifier">format</span>(
+    <span class="ruby-constant">SUMMARY_LINE_FORMAT</span>,
+    <span class="ruby-identifier">total_quantity</span>(<span class="ruby-identifier">objects</span>),
+    <span class="ruby-identifier">objects</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">code</span>,
+    <span class="ruby-identifier">total_price</span>(<span class="ruby-identifier">objects</span>)
+  )
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-total_price" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">total_price</span><span
+            class="method-args">(objects)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>This method returns the total price of all the orderable
+<code>objects</code>.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="total_price-source">
+            <pre><span class="ruby-comment"># File lib/bakery/receipt_builder.rb, line 84</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">total_price</span>(<span class="ruby-identifier">objects</span>)
+  <span class="ruby-identifier">objects</span>.<span class="ruby-identifier">inject</span>(<span class="ruby-value">0</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">total</span>, <span class="ruby-identifier">object</span><span class="ruby-operator">|</span> <span class="ruby-identifier">total</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">object</span>.<span class="ruby-identifier">price</span> }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-total_quantity" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">total_quantity</span><span
+            class="method-args">(objects)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>This method returns the total quantity in all the orderable
+<code>objects</code>.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="total_quantity-source">
+            <pre><span class="ruby-comment"># File lib/bakery/receipt_builder.rb, line 78</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">total_quantity</span>(<span class="ruby-identifier">objects</span>)
+  <span class="ruby-identifier">objects</span>.<span class="ruby-identifier">inject</span>(<span class="ruby-value">0</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">total</span>, <span class="ruby-identifier">object</span><span class="ruby-operator">|</span> <span class="ruby-identifier">total</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">object</span>.<span class="ruby-identifier">quantity</span> }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="https://rdoc.github.io/rdoc">RDoc</a> 5.0.0.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

@@ -1,0 +1,7 @@
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*.rb'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'lib/bakery/line_solver.rb'

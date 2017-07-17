@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>README - RDoc Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+  var index_rel_prefix = "./";
+</script>
+
+<script src="./js/jquery.js"></script>
+<script src="./js/darkfish.js"></script>
+
+<link href="./css/fonts.css" rel="stylesheet">
+<link href="./css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="file">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="./index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="./table_of_contents.html#pages">Pages</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+<div class="nav-section">
+  <h3>Table of Contents</h3>
+
+  <ul class="link-list" role="directory">
+    <li><a href="#label-Bakery">Bakery</a>
+    <li><a href="#label-Environments">Environments</a>
+    <li><a href="#label-System+Dependencies">System Dependencies</a>
+    <li><a href="#label-Installation">Installation</a>
+    <li><a href="#label-Running">Running</a>
+    <li><a href="#label-Development">Development</a>
+    <li><a href="#label-Licence">Licence</a>
+  </ul>
+</div>
+
+
+  <div id="project-metadata">
+    <div id="fileindex-section" class="nav-section">
+  <h3>Pages</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./Gemfile.html">Gemfile</a>
+  
+    <li><a href="./Gemfile_lock.html">Gemfile.lock</a>
+  
+    <li><a href="./Guardfile.html">Guardfile</a>
+  
+    <li><a href="./README_md.html">README</a>
+  
+    <li><a href="./samples/order_txt.html">order</a>
+  
+    <li><a href="./samples/order_with_invalid_line_txt.html">order_with_invalid_line</a>
+  
+    <li><a href="./spec/support/invalid_order_txt.html">invalid_order</a>
+  
+    <li><a href="./spec/support/order_txt.html">order</a>
+  
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-label="Page README.md">
+
+<h1 id="label-Bakery"><a href="Bakery.html">Bakery</a><span><a href="#label-Bakery">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>This application loads in a customer&#39;s order and determines the packs
+of baked goods that should be supplied to fulfill the order.</p>
+
+<p>When multiple combinations of packs can fulfill the order, the algorithm
+preferentially selects those with a larger quantity. This minimises the
+number of packs that need to be shipped.</p>
+
+<p>This is a variation of the <a
+href="https://en.wikipedia.org/wiki/Knapsack_problem">Knapsack Problem</a>.
+In this case, the weights are the quantities in each pack and the total
+weight is set as the ordered quantity. Values aren&#39;t specified but we
+know that packs with larger quantities are preferred, thus these have a
+higher value/weight ratio.</p>
+
+<h2 id="label-Environments">Environments<span><a href="#label-Environments">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<p>This project was tested on Ubuntu 16.04 and Mac OS X.</p>
+
+<h2 id="label-System+Dependencies">System Dependencies<span><a href="#label-System+Dependencies">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<p>This application requires <a href="https://www.ruby-lang.org/">Ruby</a>
+2.4.1</p>
+
+<p>Check your ruby version by running:</p>
+
+<pre>$ ruby -v</pre>
+
+<p>It is recommended to use a Ruby version manager such as RVM for managing
+Ruby versions. For information on RVM visit: <a
+href="https://rvm.io/rvm/install">rvm.io/rvm/install</a></p>
+
+<pre>$ rvm install 2.4.1</pre>
+
+<p>If already installed, you can switch versions using:</p>
+
+<pre>$ rvm use 2.4.1</pre>
+
+<p>Otherwise, to install Ruby visit: <a
+href="http://rubyinstaller.org">rubyinstaller.org</a>/.</p>
+
+<h2 id="label-Installation">Installation<span><a href="#label-Installation">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<p>Clone the repository:</p>
+
+<pre>$ git clone https://github.com/clarkbab/bakery.git
+$ cd bakery
+$ gem install bundler
+$ bundle install</pre>
+
+<h2 id="label-Running">Running<span><a href="#label-Running">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<p>To run the project you must provide a filepath that points to a valid order
+text file. Order text files should have the desired quantity and the code
+of the product separated by whitespace:</p>
+
+<pre>10 VS5
+14 MB11
+13 CF</pre>
+
+<p>Run the project with:</p>
+
+<pre>$ ./run samples/order.txt</pre>
+
+<p>You should see the following output:</p>
+
+<pre>10 VS5 $17.98
+  2 x 5 $8.99
+14 MB11 $54.80
+  1 x 8 $24.95
+  3 x 2 $9.95
+13 CF $25.85
+  2 x 5 $9.95
+  1 x 3 $5.95</pre>
+
+<h2 id="label-Development">Development<span><a href="#label-Development">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<p>The testing in this project is carried out using <a
+href="http://rspec.info/">RSpec</a>. Style guidelines and recommendations
+are taken from <a href="http://www.betterspecs.org/">Better Specs</a>.</p>
+
+<p>To run the test suite:</p>
+
+<pre>$ rspec</pre>
+
+<p>This project is developed using the <a
+href="https://github.com/bbatsov/ruby-style-guide">ruby-style-guide</a>.
+The <a href="https://github.com/bbatsov/rubocop">RuboCop</a> gem helps to
+enforce this style.</p>
+
+<p>To run rubocop against the code base run:</p>
+
+<pre>$ rubocop</pre>
+
+<p>As recommended in the ruby-style-guide, the project follows the <a
+href="https://github.com/rdoc/rdoc">rdoc</a> comment style.</p>
+
+<p>To generate the documentation run:</p>
+
+<pre>$ rdoc --all --main README.md</pre>
+
+<p>To view the docs via browser:</p>
+
+<pre>$ ruby -run -e httpd doc -p 8080</pre>
+
+<h2 id="label-Licence">Licence<span><a href="#label-Licence">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<p>This project, bakery, is licensed under the GNU Lesser General Public
+Licence.</p>
+</main>
+
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="https://rdoc.github.io/rdoc">RDoc</a> 5.0.0.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

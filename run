@@ -1,0 +1,57 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative 'lib/bakery'
+
+# Check that order has been passed.
+if ARGV[0].nil?
+  puts "Must pass filepath as argument.\n"\
+    "Usage: \n"\
+    "./run samples/order.txt\n"
+  exit
+end
+
+# Create packs for the catalogue.
+packs = Bakery::PackFactory.new.build(
+  [
+    { code: 'VS5', price: 6.99, quantity: 3 },
+    { code: 'VS5', price: 8.99, quantity: 5 },
+    { code: 'MB11', price: 9.95, quantity: 2 },
+    { code: 'MB11', price: 16.95, quantity: 5 },
+    { code: 'MB11', price: 24.95, quantity: 8 },
+    { code: 'CF', price: 5.95, quantity: 3 },
+    { code: 'CF', price: 9.95, quantity: 5 },
+    { code: 'CF', price: 16.99, quantity: 9 }
+  ]
+)
+
+# Populate the catalogue.
+catalogue = Bakery::Catalogue.new(items: packs)
+
+# Create the line solver.
+solver = Bakery::LineSolver.new(catalogue: catalogue)
+
+# Parse the order file into lines.
+lines = Bakery::OrderParser.new.parse(ARGV[0])
+
+# Create the receipt builder.
+receipt_builder = Bakery::ReceiptBuilder.new
+
+lines.each do |line|
+  begin
+    # Solve the line.
+    ordered_packs = solver.solve(line)
+  rescue Bakery::CantSatisfyOrder
+    # Print error line on receipt.
+    puts receipt_builder.error_line
+    next
+  end
+
+  # Get the receipt line.
+  receipt_line = receipt_builder.build_line(ordered_packs)
+
+  # Print each text string in the receipt line.
+  receipt_line.each do |line_text|
+    puts line_text
+  end
+end

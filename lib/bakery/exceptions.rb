@@ -2,12 +2,17 @@
 
 module Bakery
   ##
-  # This exception is raised when the LineSolver.solve method can't find
+  # This exception is raised when the LineSolver#solve method can't find
   # a solution for the ordered line.
   class CantSatisfyOrder < StandardError; end
 
   ##
-  # This exception is raised when the ReceiptBuilder.build_line method is
+  # This exception is raised when the Logger#io method doesn't recognise the
+  # the configuration setting for logger method.
+  class DirectoryNonExistant < StandardError; end
+
+  ##
+  # This exception is raised when the ReceiptBuilder#build_line method is
   # passed objects with different +codes+.
   class InconsistentCodes < StandardError; end
 
@@ -25,4 +30,9 @@ module Bakery
   # This exception is raised when the PackFactory#build method is passed an
   # invalid array +pack_config+.
   class InvalidPackConfig < StandardError; end
+
+  ##
+  # This exception is raised when the Logger#io method doesn't recognise the
+  # the configuration setting for logger method.
+  class UnknownLoggerMethod < StandardError; end
 end

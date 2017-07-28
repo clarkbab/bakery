@@ -9,7 +9,7 @@ module Bakery
     ##
     # Creates a new Logger given an IO +stream+.
     def initialize(args)
-      @stream = stream args[:stream]
+      @stream = args[:stream]
     end
 
     ##

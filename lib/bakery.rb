@@ -22,8 +22,6 @@ module Bakery
     @logger ||= Logger.new(stream: logger_stream)
   end
 
-  private_class_method :logger_stream
-
   ##
   # This method reads the configuration and returns the stream to be used for
   # logging.
@@ -43,6 +41,8 @@ module Bakery
       raise UnknownLoggerMethod
     end
   end
+
+  private_class_method :logger_stream
 end
 
 require_relative 'bakery/catalogue'

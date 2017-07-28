@@ -16,7 +16,7 @@ module Bakery
     # of an order.
     def solve(line)
       # Get the desired amount.
-      ordered_quantity = line.quantity
+      quantity = line.quantity
 
       # Search the catalogue for objects that match the line code.
       objects = @catalogue.search_by_code(line.code)
@@ -25,14 +25,14 @@ module Bakery
       objects.sort! { |a, b| b.quantity <=> a.quantity }
 
       # Solve the order.
-      get_order(objects, ordered_quantity)
+      get_order(objects, quantity)
     end
 
     private
 
     ##
-    # This method returns the total quantity of items in an +order+.
-    def get_total_quantity(order)
+    # This method returns the total number of items in an +order+.
+    def get_quantity(order)
       order.inject(0) { |total, object| total + object.quantity }
     end
 
@@ -47,10 +47,12 @@ module Bakery
     #
     # This algorithm finds the first object that fits into the desired quantity
     # and adds it to the order. It then calculates the remaining quantity and
-    # tries to recursively satisfy an order for that sub-quantity. If the order
-    # can't be satisfied for that quantity, it removes the object and tries with
-    # the next largest object. If it reaches the end of the objects array and
-    # none fit into the desired quantity, then it raises a CantSatisfyOrder
+    # tries to recursively satisfy an order for that sub-quantity. It only
+    # passes objects to the sub-method that are equal to or smaller than the
+    # most recently added object. If the order can't be satisfied for a
+    # quantity, it removes the last object and tries with the next largest
+    # object. If it reaches the end of the objects array and none are small
+    # enough to fit into the desired quantity, then it raises a CantSatisfyOrder
     # exception.
     def get_order(objects, quantity)
       order = []
@@ -64,7 +66,7 @@ module Bakery
         order << object
 
         # Get remaining quantity.
-        remaining_quantity = quantity - get_total_quantity(order)
+        remaining_quantity = quantity - get_quantity(order)
 
         # Order has been fulfilled.
         return order if remaining_quantity.zero?
@@ -77,10 +79,10 @@ module Bakery
 
         begin
           # Get objects which satisfy the remaining quantity.
-          order << get_order(possible_objects, remaining_quantity)
+          sub_order = get_order(possible_objects, remaining_quantity)
 
-          # Flatten the order array to combine the sub-order with this order.
-          order.flatten!
+          # Add the solved sub-order to the main order.
+          order.concat sub_order
 
           # Return the order.
           return order

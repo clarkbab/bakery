@@ -69,9 +69,15 @@ module Bakery
         # Order has been fulfilled.
         return order if remaining_quantity.zero?
 
+        # Get objects that have a size equal to, or smaller than, the added
+        # object.
+        possible_objects = objects.select do |item|
+          item.quantity <= object.quantity
+        end
+
         begin
           # Get objects which satisfy the remaining quantity.
-          order << get_order(objects, remaining_quantity)
+          order << get_order(possible_objects, remaining_quantity)
 
           # Flatten the order array to combine the sub-order with this order.
           order.flatten!

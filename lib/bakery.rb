@@ -26,12 +26,15 @@ module Bakery
   # This method reads the configuration and returns the stream to be used for
   # logging.
   def self.logger_stream
-    case configuration.logger_method
+    case configuration.logging_method
     when :file
       # Get log path configuration.
       logpath = configuration.logpath
 
-      raise DirectoryNonExistant unless Dir.exist?(logpath)
+      # Get file directory name.
+      dirname = File.dirname(logpath)
+
+      raise DirectoryNonExistant unless Dir.exist?(dirname)
 
       # Open the IO stream.
       open(logpath, 'w')

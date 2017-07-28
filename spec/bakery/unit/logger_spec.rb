@@ -8,7 +8,7 @@ RSpec.describe Bakery::Logger do
       now = DateTime.now
       allow(DateTime).to receive(:now).and_return now
       expect_any_instance_of(StringIO)
-        .to receive(:write).with("#{now}[ACTION]: Message")
+        .to receive(:write).with("#{now}[ACTION]: Message\n")
       subject.log :action, 'Message'
     end
   end

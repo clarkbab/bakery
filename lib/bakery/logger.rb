@@ -15,7 +15,7 @@ module Bakery
     ##
     # This method writes a log line to the configured IO object.
     def log(action, message)
-      @stream.write "#{DateTime.now}[#{action.upcase}]: #{message}"
+      @stream.write "#{DateTime.now}[#{action.upcase}]: #{message}\n"
     end
   end
 end
